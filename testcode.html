@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+    <meta http-equiv="expires" content="0"> 
+    <meta name="generator" content="CoffeeCup HTML Editor (www.coffeecup.com)">
+    <meta name="dcterms.created" content="Thu, 14 Feb 2013 20:13:32 GMT">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+<title>Test</title>
+
+<style type="text/css">
+
+a {
+   font-family:arial;
+	background-color: #FFFFFF;
+	margin:10px 0pt 15px;
+	font-size: 10pt;
+	width: 100%;
+	text-align: left;
+	position:absolute;
+	top:1px;
+	left:1px}
+
+/* CSS from 'style.css' - tables */
+table.tablesorter {
+	font-family:arial;
+	background-color: #CDCDCD;
+	margin:10px 0pt 15px;
+	font-size: 8pt;
+	width: 100%;
+	text-align: left;
+	position:absolute;
+	top:25px;
+	left:1px;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+	background-color: #e6EEEE;
+	border: 1px solid #FFF;
+	font-size: 8pt;
+	padding: 4px;
+}
+
+table.tablesorter thead tr .header {
+	background-image: url(bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+	background-color: #3182BD;
+}
+
+table.tablesorter tbody td {
+	color: #3D3D3D;
+	padding: 4px;
+	background-color: #FFF;
+	vertical-align: top;
+}
+
+table.tablesorter tbody tr.odd td {
+	background-color:#F0F0F6;
+}
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(asc.gif);
+	background-color: #9ECAE1;
+}
+	
+table.tablesorter td.primary,
+table.tablesorter tr.odd td.primary {
+	background-color: #99b3e6;
+}
+table.tablesorter tr.even td.primary {
+	background-color: #c2d1f0;
+}
+
+table.tablesorter td.secondary,
+table.tablesorter tr.odd td.secondary {
+	background-color: #c2d1f0;
+}
+table.tablesorter tr.even td.secondary {
+	background-color: #d6e0f5;
+}
+
+table.tablesorter td.tertiary,
+table.tablesorter tr.odd td.tertiary {
+	background-color: #d6e0f5;
+}
+table.tablesorter tr.even td.tertiary {
+	background-color: #ebf0fa;
+}
+	
+/*table tr:hover {
+    background: #fff;
+    color: #ccc;
+}*/
+
+
+/*table tr:nth-child(even) {
+    background: #f0f8ff;
+}
+
+table th {
+	  background: #9ECAE1;
+	  }
+	
+table {
+	  border-width:0px;
+	  border-style:solid;
+	  border-color:black;
+	  position:absolute;
+	  top:5px;
+	  left:5px;
+}*/
+  
+</style>
+
+</head>
+
+<body>
+
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script> 
+	<script type="text/javascript" src="jquery.csvToTable.js"></script>
+	<script type="text/javascript" src="jquery.tablesorter.min.js"></script>
+	<script type="text/javascript" src="jquery.tablesorter.widgets.js"></script>
+<table id="CSVTable" class="tablesorter" style="display: none; visibility: hidden;"></table>
+<script>
+
+
+/*$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "https://github.com/geomapper123/testdatastickyheadersissue/blob/master/testdatastickyheadersissue.csv",
+        dataType: "text",
+        success: function(data) {processData(data);}
+     });
+});
+
+function processData(allText) {
+    var allTextLines = allText.split(/\r\n|\n/);
+    var headers = allTextLines[0].split(',');
+    var lines = [];
+
+    for (var i=1; i<allTextLines.length; i++) {
+        var data = allTextLines[i].split(',');
+        if (data.length == headers.length) {
+
+            var tarr = [];
+            for (var j=0; j<headers.length; j++) {
+                tarr.push(headers[j]+":"+data[j]);
+            }
+            lines.push(tarr);
+        }
+    }
+    // alert(lines);
+}*/
+
+$('#CSVTable').CSVToTable('testdatastickyheadersissue.csv', {
+    loadingImage: 'loading.gif', 
+    startLine: 1,
+    headers: ['id', 'name', 'pop11']
+}).bind("loadComplete",function() { 
+    $(document).find('#CSVTable').tablesorter({
+		headerTemplate : '{content}{icon}',
+		widgets : ['zebra', 'stickyHeaders', 'columns'], // include the zebra widget
+		widgetOptions : {
+		stickyHeaders : 'tablesorter-stickyHeader',
+      // change the default column class names
+      // primary is the first column sorted, secondary is the second, etc
+      columns : ['primary', 'secondary', 'tertiary']
+      // include thead when adding class names
+      /*columns_thead : true,
+      // include tfoot when adding class names
+      columns_tfoot : true*/
+    }
+	
+    });
+});
+
+function toggle() {
+	var ele = document.getElementById("CSVTable");
+	var text = document.getElementById("displayText");
+	if(ele.style.display == "block") {
+    		ele.style.display = "none";
+		text.innerHTML = "Show data table for counties";
+  	}
+	else {
+		ele.style.display = "block";
+		text.innerHTML = "Hide data table for counties";
+	}
+} 
+
+function toggleVisibility() {
+  document.getElementById("CSVTable").style.display = "";
+  if(document.getElementById("CSVTable").style.visibility == "hidden" ) {
+    document.getElementById("CSVTable").style.visibility = "visible";
+  }
+  else {
+  document.getElementById("CSVTable").style.visibility = "hidden";
+  }
+} 
+
+</script>  
+<a href="javascript:toggleVisibility();">Click here to display/hide data table for counties.</a>
+  </body>
+</html>
